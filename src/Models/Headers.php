@@ -8,7 +8,7 @@
 
 namespace HughCube\Spreadsheet\Models;
 
-use HughCube\Spreadsheet\ParseSheet;
+use HughCube\Spreadsheet\SheetParser;
 use Throwable;
 
 class Headers
@@ -51,8 +51,15 @@ class Headers
     /**
      * @return null|static
      */
-    public static function parse(ParseSheet $parse, $patterns)
+    public static function parse(SheetParser $parse, $patterns): ?Headers
     {
+        $requiredKeys = [];
+        foreach ($patterns as $key => $pattern) {
+            if ($pattern['required'] ?? true) {
+                $requiredKeys[] = $key;
+            }
+        }
+
         foreach ($parse->getsheet()->getRowIterator() as $row) {
 
             /** 获取整个行 */
@@ -76,7 +83,7 @@ class Headers
                 }
             }
 
-            if (count($headers) === count($patterns)) {
+            if (empty(array_diff($requiredKeys, array_keys($headers)))) {
                 /** @phpstan-ignore-next-line */
                 return new static($row->getRowIndex(), $headers);
             }
