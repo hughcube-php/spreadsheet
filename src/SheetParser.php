@@ -62,6 +62,20 @@ class SheetParser
     }
 
     /**
+     * @param  int|string  $name
+     * @param  null|callable  $is
+     * @param  null|callable  $format
+     * @param  bool  $required
+     * @return $this
+     */
+    public function addHeaderPattern($name, $is, $format = null, bool $required = true): SheetParser
+    {
+        $this->headerPatterns[$name] = ['is' => $is, 'format' => $format, 'required' => $required];
+
+        return $this;
+    }
+
+    /**
      * @return null|Headers
      */
     public function getHeaders()
