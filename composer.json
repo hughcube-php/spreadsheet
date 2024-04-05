@@ -1,0 +1,40 @@
+{
+    "name": "hughcube/spreadsheet",
+    "description": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "hugh.li",
+            "email": "hugh.li@foxmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "phpoffice/phpspreadsheet": "^1.29"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "phpstan/phpstan": "*",
+        "orchestra/testbench": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "HughCube\\Spreadsheet\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "HughCube\\Spreadsheet\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+    },
+    "scripts": {
+        "test": "phpunit",
+        "phpstan": "phpstan analyse -vvv",
+        "check-style": "phpcs -p --standard=PSR2 src/ -v",
+        "fix-style": "phpcbf -p --standard=PSR2 src/ -v"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
