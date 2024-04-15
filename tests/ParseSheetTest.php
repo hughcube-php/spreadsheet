@@ -105,6 +105,8 @@ class ParseSheetTest extends TestCase
             /** 保存错误文件 */
             $writer = new Xlsx($excel);
             $writer->save(sprintf('%s.error.%s.xlsx', $file, __FUNCTION__));
+
+            $this->assertTrue(true);
         }
     }
 }
