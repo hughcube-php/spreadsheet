@@ -166,9 +166,9 @@ class SheetParser
 
             /** 错误单元格标色 */
             foreach ($errors as $key => $message) {
-                $header = $headers->getHeaders()[$key];
+                $header = $headers->getHeaders()[$key] ?? null;
                 if (null === $header) {
-                    throw new Exception(sprintf('Header key not found: %s', $key));
+                    continue;
                 }
 
                 /** 设置备注 */
