@@ -39,7 +39,10 @@ class SheetParser
      */
     protected $errors = [];
 
-    public static function parse(Worksheet $sheet, array $patterns): SheetParser
+    /**
+     * @return static
+     */
+    public static function parse(Worksheet $sheet, array $patterns = []): SheetParser
     {
         /** @phpstan-ignore-next-line */
         return new static($sheet, $patterns);
