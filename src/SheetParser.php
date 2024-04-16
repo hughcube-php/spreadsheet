@@ -30,6 +30,11 @@ class SheetParser
     protected $headers = false;
 
     /**
+     * @var null|Headers
+     */
+    protected $closestHeaders = null;
+
+    /**
      * @var array
      */
     protected $headerPatterns;
@@ -84,9 +89,16 @@ class SheetParser
     public function getHeaders()
     {
         if (false === $this->headers) {
-            $this->headers = Headers::parse($this, $this->getHeaderPatterns());
+            list($this->headers, $this->closestHeaders) = Headers::parse($this, $this->getHeaderPatterns());
         }
         return $this->headers;
+    }
+
+    public function getClosestHeaders(): ?Headers
+    {
+        $this->getHeaders();
+
+        return $this->closestHeaders;
     }
 
     public function getErrors(): array

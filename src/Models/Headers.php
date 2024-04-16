@@ -49,9 +49,9 @@ class Headers
     }
 
     /**
-     * @return null|static
+     * @return array<int, null|static>
      */
-    public static function parse(SheetParser $parse, $patterns): ?Headers
+    public static function parse(SheetParser $parse, $patterns): array
     {
         $requiredKeys = [];
         foreach ($patterns as $key => $pattern) {
@@ -60,6 +60,8 @@ class Headers
             }
         }
 
+        $match = false;
+        $closestHeaders = null;
         foreach ($parse->getsheet()->getRowIterator() as $row) {
 
             /** 获取整个行 */
@@ -83,12 +85,17 @@ class Headers
                 }
             }
 
-            if (empty(array_diff($requiredKeys, array_keys($headers)))) {
+            if (!$closestHeaders instanceof static || count($headers) >= count($closestHeaders->getHeaders())) {
                 /** @phpstan-ignore-next-line */
-                return new static($row->getRowIndex(), $headers);
+                $closestHeaders = new static($row->getRowIndex(), $headers);
+            }
+
+            if (empty(array_diff($requiredKeys, array_keys($headers)))) {
+                $match = true;
+                break;
             }
         }
 
-        return null;
+        return [($match ? $closestHeaders : null), $closestHeaders];
     }
 }
