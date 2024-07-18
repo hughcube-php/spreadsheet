@@ -106,14 +106,16 @@ class SheetParser
         return $this->errors;
     }
 
-    public function getDataIterator()
+    public function getDataIterator($maxRowCount = null)
     {
         $headers = $this->getHeaders();
         if (null == $headers) {
             return;
         }
 
-        foreach ($this->getsheet()->getRowIterator($headers->getIndex() + 1) as $row) {
+        $startRowIndex = $headers->getIndex() + 1;
+        $endRowIndex = empty($maxRowCount) ? null : $startRowIndex + $maxRowCount;
+        foreach ($this->getsheet()->getRowIterator($startRowIndex, $endRowIndex) as $row) {
 
             /** 获取整个行 */
             $cells = [];
@@ -135,9 +137,9 @@ class SheetParser
         }
     }
 
-    public function eachWithCheck(callable $callback): SheetParser
+    public function eachWithCheck(callable $callback, $maxRowCount = null): SheetParser
     {
-        foreach ($this->getDataIterator() as $index => $fields) {
+        foreach ($this->getDataIterator($maxRowCount) as $index => $fields) {
             $results = $callback($fields, $index);
 
             /** 中断 */
