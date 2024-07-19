@@ -112,14 +112,13 @@ class SheetParser
         if (null == $headers) {
             return;
         }
+        $endColumn = $headers->getMaxHeaderIndex();
 
         $startRowIndex = $headers->getIndex() + 1;
         $endRowIndex = empty($maxRowCount) ? null : $startRowIndex + $maxRowCount;
         foreach ($this->getsheet()->getRowIterator($startRowIndex, $endRowIndex) as $row) {
-
-            /** 获取整个行 */
             $cells = [];
-            foreach ($row->getCellIterator() as $index => $cell) {
+            foreach ($row->getCellIterator('A', $endColumn) as $index => $cell) {
                 try {
                     $cells[$index] = $cell->getFormattedValue();
                 } catch (Throwable $exception) {
@@ -131,7 +130,6 @@ class SheetParser
             foreach ($headers->getHeaders() as $key => $header) {
                 $fields[$key] = $header->formatValue($cells[$header->getIndex()] ?? null);
             }
-
 
             yield $row->getRowIndex() => $fields;
         }
