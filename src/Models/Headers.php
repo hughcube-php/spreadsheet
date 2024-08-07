@@ -39,7 +39,16 @@ class Headers
         return $this->index;
     }
 
+    /**
+     * @deprecated
+     * @see self::getMaxHeaderColumn()
+     */
     public function getMaxHeaderIndex(): string
+    {
+        return $this->getMaxColumn();
+    }
+
+    public function getMaxColumn(): string
     {
         $index = 'A';
         foreach ($this->getHeaders() as $header) {

@@ -71,12 +71,12 @@ class SheetParser
 
     /**
      * @param  int|string  $name
-     * @param  null|callable  $is
-     * @param  null|callable  $format
+     * @param callable|null $is
+     * @param callable|null $format
      * @param  bool  $required
      * @return $this
      */
-    public function addHeaderPattern($name, $is, $format = null, bool $required = true): SheetParser
+    public function addHeaderPattern($name, ?callable $is, ?callable $format = null, bool $required = true): SheetParser
     {
         $this->headerPatterns[$name] = ['is' => $is, 'format' => $format, 'required' => $required];
 
@@ -112,7 +112,7 @@ class SheetParser
         if (null == $headers) {
             return;
         }
-        $endColumn = $headers->getMaxHeaderIndex();
+        $endColumn = $headers->getMaxColumn();
 
         $startRowIndex = $headers->getIndex() + 1;
         $endRowIndex = empty($maxRowCount) ? null : $startRowIndex + $maxRowCount;
@@ -166,15 +166,14 @@ class SheetParser
         if (null == $headers) {
             return;
         }
-
-        $maxHeaderIndex = $this->getHeaders()->getMaxHeaderIndex();
+        $maxColumn = $this->getHeaders()->getMaxColumn();
 
         foreach ($this->getErrors() as $rowIndex => $errors) {
             /** 给错误行标色 */
             $this->getSheet()
                 ->getStyle(new CellRange(
                     CellAddress::fromCellAddress(sprintf('%s%s', 'A', $rowIndex)),
-                    CellAddress::fromCellAddress(sprintf('%s%s', $maxHeaderIndex, $rowIndex))
+                    CellAddress::fromCellAddress(sprintf('%s%s', $maxColumn, $rowIndex))
                 ))
                 ->getFill()->setFillType(Fill::FILL_SOLID)
                 ->getStartColor()->setARGB(Color::COLOR_YELLOW);
